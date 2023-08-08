@@ -34,13 +34,17 @@ export const router = createBrowserRouter([
             element: <HomePage />,
           },
           {
-            path: "/account",
+            path: "account",
             element: <AccountPage />,
+          },
+          {
+            path: "*",
+            element: <NotFoundPage />,
           },
         ],
       },
       {
-        path: "/login",
+        path: "login",
         element: (
           <AuthRoute>
             <LoginPage />
@@ -48,7 +52,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/signup",
+        path: "signup",
         element: (
           <AuthRoute>
             <SignupPage />
@@ -56,7 +60,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/*",
+        path: "*",
         element: <NotFoundPage />,
       },
     ],
