@@ -1,3 +1,12 @@
+import { useAuth } from "@/components/auth/auth-provider";
+import { Button } from "@/components/ui/button";
+
 export const HomePage = () => {
-  return <div>Home</div>;
+  const auth = useAuth();
+
+  return (
+    <div>
+      <Button onClick={auth.logout}>logout</Button>
+    </div>
+  );
 };

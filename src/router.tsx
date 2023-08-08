@@ -4,15 +4,28 @@ import { LoginPage } from "./routes/login";
 import { HomePage } from "./routes/home";
 import { NotFoundPage } from "./routes/404";
 import { AppLayout } from "./routes/app-layout";
+import {
+  AuthProvider,
+  AuthRoute,
+  ProtectedRoute,
+} from "./components/auth/auth-provider";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout />,
+    element: (
+      <AuthProvider>
+        <RootLayout />
+      </AuthProvider>
+    ),
     children: [
       {
         path: "/",
-        element: <AppLayout />,
+        element: (
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        ),
         children: [
           {
             index: true,
@@ -22,7 +35,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/login",
-        element: <LoginPage />,
+        element: (
+          <AuthRoute>
+            <LoginPage />
+          </AuthRoute>
+        ),
       },
       {
         path: "/*",
