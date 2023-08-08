@@ -14,36 +14,36 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
-export const LoginPage = () => {
+export const SignupPage = () => {
   return (
     <div className="py-4 space-y-8">
-      <h1 className="text-4xl text-center">Login</h1>
-      <LoginForm />
+      <h1 className="text-4xl text-center">Create Account</h1>
+      <SignupForm />
       <div>
-        <p className="text-muted-foreground">Don't have an account?</p>
-        <Link to="/signup" className="underline">
-          Create account
+        <p className="text-muted-foreground">Already have an account?</p>
+        <Link to="/login" className="underline">
+          Login
         </Link>
       </div>
     </div>
   );
 };
 
-const loginSchema = z.object({
+const signupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 });
 
-const loginResolver = zodResolver(loginSchema);
+const signupResolver = zodResolver(signupSchema);
 
-type LoginValues = z.infer<typeof loginSchema>;
+type SignupValues = z.infer<typeof signupSchema>;
 
-const LoginForm = () => {
-  const form = useForm<LoginValues>({
-    resolver: loginResolver,
+const SignupForm = () => {
+  const form = useForm<SignupValues>({
+    resolver: signupResolver,
   });
 
-  const onSubmit = (data: LoginValues) => {
+  const onSubmit = (data: SignupValues) => {
     console.log(data);
   };
 
@@ -78,7 +78,7 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <Button className="w-full">Login</Button>
+        <Button className="w-full">Sign up</Button>
       </form>
     </Form>
   );

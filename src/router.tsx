@@ -9,6 +9,7 @@ import {
   AuthRoute,
   ProtectedRoute,
 } from "./components/auth/auth-provider";
+import { SignupPage } from "./routes/signup";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,14 @@ export const router = createBrowserRouter([
         element: (
           <AuthRoute>
             <LoginPage />
+          </AuthRoute>
+        ),
+      },
+      {
+        path: "/signup",
+        element: (
+          <AuthRoute>
+            <SignupPage />
           </AuthRoute>
         ),
       },
