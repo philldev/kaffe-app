@@ -1,54 +1,51 @@
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { useSupabase } from "@/lib/supabase";
+import { Session } from "@supabase/supabase-js";
+import { ReactNode, createContext, useContext } from "react";
+import { useQuery } from "react-query";
 import { Navigate } from "react-router-dom";
+import { OverlaySpinner } from "../ui/spinner";
 
-type Status = "pending" | "ready" | "error";
-
-const AuthContext = createContext<{
+type Status = "error" | "idle" | "loading" | "success";
+type AuthContext = {
+  getSession: () => Session | null | undefined;
   getLoggedIn: () => boolean;
   getIsLoading: () => boolean;
   getStatus: () => Status;
-  login: () => void;
-  logout: () => void;
-} | null>(null);
+  invalidate: () => void;
+};
+
+const AuthContext = createContext<AuthContext | null>(null);
 
 export const AuthProvider = (props: { children: ReactNode }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [status, setStatus] = useState<Status>("pending");
+  const supabase = useSupabase();
 
-  console.log({
-    loggedIn,
-    status,
+  const sessionQuery = useQuery({
+    queryKey: "session",
+    async queryFn() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) throw error;
+      return data.session;
+    },
   });
 
-  const getLoggedIn = () => loggedIn;
-  const getIsLoading = () => status === "pending";
-  const getStatus = () => status;
+  const getSession = () => sessionQuery.data;
+  const getLoggedIn = () => !!getSession();
+  const getIsLoading = () => sessionQuery.isLoading;
+  const getStatus = () => sessionQuery.status;
 
-  const login = () => setLoggedIn(true);
-  const logout = () => setLoggedIn(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setStatus("ready");
-    }, 2000);
-  }, []);
+  const invalidate = () => sessionQuery.refetch();
 
   return (
     <AuthContext.Provider
       value={{
+        getSession,
         getLoggedIn,
         getIsLoading,
         getStatus,
-        login,
-        logout,
+        invalidate,
       }}
     >
+      {getStatus() === "loading" ? <OverlaySpinner /> : null}
       {props.children}
     </AuthContext.Provider>
   );
@@ -62,14 +59,14 @@ export const useAuth = () => {
 
 export const ProtectedRoute = (props: { children: ReactNode }) => {
   const auth = useAuth();
-  if (auth.getStatus() !== "ready") return <div>Loading...</div>;
+  if (auth.getStatus() !== "success") return <div>Loading...</div>;
   if (!auth.getLoggedIn()) return <Navigate to="/login" />;
   return props.children;
 };
 
 export const AuthRoute = (props: { children: ReactNode }) => {
   const auth = useAuth();
-  if (auth.getStatus() !== "ready") return <div>Loading...</div>;
+  if (auth.getStatus() !== "success") return <div>Loading...</div>;
   if (auth.getLoggedIn()) return <Navigate to="/" />;
   return props.children;
 };

@@ -13,6 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useSupabase } from "@/lib/supabase";
+import { toast } from "@/components/ui/use-toast";
+import { useAuth } from "@/components/auth/auth-provider";
 
 export const LoginPage = () => {
   return (
@@ -43,8 +46,21 @@ const LoginForm = () => {
     resolver: loginResolver,
   });
 
-  const onSubmit = (data: LoginValues) => {
-    console.log(data);
+  const supabase = useSupabase();
+  const auth = useAuth();
+
+  const onSubmit = async (values: LoginValues) => {
+    const { error } = await supabase.auth.signInWithPassword(values);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+      });
+      return;
+    }
+
+    auth.invalidate();
   };
 
   return (
@@ -57,7 +73,7 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input type="email" {...field} />
               </FormControl>
               <FormDescription />
               <FormMessage />
@@ -71,7 +87,7 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input type="password" {...field} />
               </FormControl>
               <FormDescription />
               <FormMessage />

@@ -13,6 +13,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast";
+import { useSupabase } from "@/lib/supabase";
 
 export const SignupPage = () => {
   return (
@@ -39,12 +41,23 @@ const signupResolver = zodResolver(signupSchema);
 type SignupValues = z.infer<typeof signupSchema>;
 
 const SignupForm = () => {
+  const supabase = useSupabase();
+
   const form = useForm<SignupValues>({
     resolver: signupResolver,
   });
 
-  const onSubmit = (data: SignupValues) => {
-    console.log(data);
+  const onSubmit = async (values: SignupValues) => {
+    const { error } = await supabase.auth.signUp(values);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
   };
 
   return (
@@ -57,7 +70,7 @@ const SignupForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input type="email" {...field} />
               </FormControl>
               <FormDescription />
               <FormMessage />
@@ -71,7 +84,7 @@ const SignupForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input type="password" {...field} />
               </FormControl>
               <FormDescription />
               <FormMessage />

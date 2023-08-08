@@ -5,12 +5,24 @@ import { ThemeProvider } from "./components/theme/theme-provider.tsx";
 import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router.tsx";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <SupabaseProvider>
       <ThemeProvider>
-        <RouterProvider router={router} />
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
       </ThemeProvider>
     </SupabaseProvider>
   </React.StrictMode>
