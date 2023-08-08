@@ -7,7 +7,7 @@ import {
   IconPlus,
   IconUser,
 } from "@tabler/icons-react";
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 export const AppLayout = () => {
   return (
@@ -22,24 +22,24 @@ export const AppLayout = () => {
 
 const menus = [
   {
-    icon: <IconHome strokeWidth={1} />,
+    Icon: IconHome,
     path: "/",
   },
   {
-    icon: <IconClipboard strokeWidth={1} />,
-    path: "/",
+    Icon: IconClipboard,
+    path: "/orders",
   },
   {
-    icon: <IconPlus strokeWidth={1} />,
-    path: "/",
+    Icon: IconPlus,
+    path: "/order/new",
   },
   {
-    icon: <IconBox strokeWidth={1} />,
-    path: "/",
+    Icon: IconBox,
+    path: "/products",
   },
   {
-    icon: <IconUser strokeWidth={1} />,
-    path: "/",
+    Icon: IconUser,
+    path: "/account",
   },
 ];
 
@@ -49,18 +49,21 @@ const NavMenus = () => {
       <div className="h-[60px] max-w-xl flex mx-auto items-center border-t w-full">
         <nav className="flex gap-4 w-full">
           {menus.map((item) => (
-            <Link
+            <NavLink
               to={item.path}
-              className={cn(
-                buttonVariants({
-                  variant: "ghost",
-                  size: "icon",
-                }),
-                "w-full flex-1"
-              )}
+              className={({ isActive }) =>
+                cn(
+                  buttonVariants({
+                    variant: "ghost",
+                    size: "icon",
+                  }),
+                  "w-full flex-1",
+                  isActive ? "text-foreground" : "text-muted-foreground"
+                )
+              }
             >
-              {item.icon}
-            </Link>
+              {({ isActive }) => <item.Icon strokeWidth={isActive ? 2 : 1} />}
+            </NavLink>
           ))}
         </nav>
       </div>

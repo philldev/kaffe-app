@@ -10,6 +10,7 @@ import {
   ProtectedRoute,
 } from "./components/auth/auth-provider";
 import { SignupPage } from "./routes/signup";
+import { AccountPage } from "./routes/account";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <HomePage />,
+          },
+          {
+            path: "/account",
+            element: <AccountPage />,
           },
         ],
       },
