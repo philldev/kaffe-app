@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { OverlaySpinner } from "@/components/ui/spinner";
+import { toast } from "@/components/ui/use-toast";
 import { useSupabase } from "@/lib/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { z } from "zod";
 
 export const AccountPage = () => {
@@ -34,13 +35,17 @@ export const AccountPage = () => {
       <div className="py-2">
         <p className="font-semibold">Account</p>
       </div>
-      <div className="py-6 space-y-4">
+      <div className="py-6 flex flex-col gap-6">
         {isLoading ? (
           <OverlaySpinner />
         ) : (
           <>
             <ProfileForm defaultValues={profileQ.data} />
-            <Button onClick={handleLogout}>Logout</Button>
+            <div className="flex justify-end">
+              <Button variant="destructive" onClick={handleLogout}>
+                Logout
+              </Button>
+            </div>
           </>
         )}
       </div>
@@ -78,6 +83,38 @@ const useProfile = () => {
   });
 };
 
+const useUpdateProfile = (
+  props: {
+    onSuccess?: () => void;
+    onError?: (error: any) => void;
+  } = {}
+) => {
+  const supabase = useSupabase();
+  const auth = useAuth();
+
+  const userId = auth.getSession()?.user.id;
+
+  return useMutation({
+    mutationKey: ["profile"],
+    async mutationFn(values: Partial<Profile>) {
+      return supabase
+        .from("profiles")
+        .update({
+          ...values,
+        })
+        .eq("id", userId)
+        .select()
+        .throwOnError();
+    },
+    onSuccess() {
+      props.onSuccess?.();
+    },
+    onError(error) {
+      props.onError?.(error);
+    },
+  });
+};
+
 const profileSchema = z.object({
   full_name: z.string().optional(),
   email: z.string().optional(),
@@ -93,13 +130,32 @@ const ProfileForm = (props: { defaultValues?: ProfileValues }) => {
     defaultValues: props.defaultValues,
   });
 
+  const mutation = useUpdateProfile({
+    onSuccess() {
+      toast({
+        title: "Success",
+      });
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message ?? "something went wrong",
+      });
+    },
+  });
+
   const onSubmit = (values: ProfileValues) => {
-    console.log(values);
+    mutation.mutate(values);
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-3"
+      >
+        {mutation.isLoading && <OverlaySpinner />}
         <FormField
           control={form.control}
           name="email"
@@ -121,12 +177,16 @@ const ProfileForm = (props: { defaultValues?: ProfileValues }) => {
             <FormItem>
               <FormLabel>Full Name</FormLabel>
               <FormControl>
-                <Input type="email" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        <div className="flex justify-end">
+          <Button>Update Profile</Button>
+        </div>
       </form>
     </Form>
   );
