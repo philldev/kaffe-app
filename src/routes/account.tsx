@@ -1,5 +1,6 @@
 import { useAuth } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   FormField,
   Form,
@@ -40,9 +41,21 @@ export const AccountPage = () => {
           <OverlaySpinner />
         ) : (
           <>
-            <ProfileForm defaultValues={profileQ.data} />
+            <Card>
+              <CardHeader>
+                <CardTitle>Profile</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ProfileForm defaultValues={profileQ.data} />
+              </CardContent>
+            </Card>
             <div className="flex justify-end">
-              <Button variant="destructive" onClick={handleLogout}>
+              <Button variant="ghost" onClick={handleLogout}>
+                Update Password
+              </Button>
+            </div>
+            <div className="flex justify-end">
+              <Button variant="ghost" onClick={handleLogout}>
                 Logout
               </Button>
             </div>
