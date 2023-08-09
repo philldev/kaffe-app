@@ -13,9 +13,7 @@ export const AppLayout = () => {
   return (
     <>
       <NavMenus />
-      <div className="py-4">
-        <Outlet />
-      </div>
+      <Outlet />
     </>
   );
 };
@@ -45,8 +43,8 @@ const menus = [
 
 const NavMenus = () => {
   return (
-    <div className="fixed bottom-0 inset-x-0">
-      <div className="h-[60px] max-w-xl flex mx-auto items-center border-t w-full">
+    <div className="fixed bottom-0 inset-x-0 z-40">
+      <div className="h-[60px] bg-background max-w-xl flex mx-auto items-center border-t w-full">
         <nav className="px-4 flex gap-4 w-full">
           {menus.map((item) => (
             <NavLink

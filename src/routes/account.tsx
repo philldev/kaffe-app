@@ -21,7 +21,7 @@ export const AccountPage = () => {
   const isLoading = profileQ.isLoading;
 
   return (
-    <div>
+    <div className="px-4">
       <div className="py-2">
         <p className="font-semibold">Account</p>
       </div>
