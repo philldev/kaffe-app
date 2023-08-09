@@ -11,6 +11,7 @@ import {
 } from "./components/auth/auth-provider";
 import { SignupPage } from "./routes/signup";
 import { AccountPage } from "./routes/account";
+import { ProductsPage } from "./routes/products";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
           {
             path: "account",
             element: <AccountPage />,
+          },
+          {
+            path: "products",
+            element: <ProductsPage />,
           },
           {
             path: "*",

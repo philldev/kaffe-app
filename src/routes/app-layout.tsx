@@ -47,7 +47,7 @@ const NavMenus = () => {
   return (
     <div className="fixed bottom-0 inset-x-0">
       <div className="h-[60px] max-w-xl flex mx-auto items-center border-t w-full">
-        <nav className="flex gap-4 w-full">
+        <nav className="px-4 flex gap-4 w-full">
           {menus.map((item) => (
             <NavLink
               to={item.path}
