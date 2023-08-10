@@ -41,8 +41,9 @@ const Filter = () => {
           <IconFilter />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="max-w-xs w-full" collisionPadding={16}>
+      <DropdownMenuContent className="w-[250px]" collisionPadding={16}>
         <DropdownMenuLabel>Status</DropdownMenuLabel>
+        <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={status} onValueChange={setStatus}>
           <DropdownMenuRadioItem value="new">New</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="completed">
@@ -54,6 +55,7 @@ const Filter = () => {
         </DropdownMenuRadioGroup>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>Date Range</DropdownMenuLabel>
+        <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={dateRange} onValueChange={setDateRange}>
           <DropdownMenuRadioItem value="new">Today</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="completed">

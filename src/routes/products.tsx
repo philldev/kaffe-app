@@ -1,20 +1,59 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import {
+  HamburgerMenuIcon,
+  Pencil1Icon,
+  PlusIcon,
+} from "@radix-ui/react-icons";
 import { IconSearch } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
 
 export const ProductsPage = () => {
   return (
     <div className="flex flex-col overflow-hidden h-[calc(100vh-60px)]">
-      <div className="pb-4 pt-6 px-4 flex items-center gap-4">
+      <div className="p-4 flex items-center justify-between gap-4">
         <p className="font-semibold">Products</p>
+        <ProductsMenu />
       </div>
       <SearchForm />
       <CategoryTabs />
       <ProductList />
     </div>
+  );
+};
+
+const ProductsMenu = () => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size="icon" variant="ghost">
+          <HamburgerMenuIcon className="w-4 h-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent collisionPadding={16}>
+        <DropdownMenuItem>
+          <Link className="flex items-center" to="/products/new">
+            <PlusIcon className="mr-2" />
+            <span>Add Product</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link className="flex items-center" to="/products/categories">
+            <Pencil1Icon className="mr-2" />
+            <span>Edit Categories</span>
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
