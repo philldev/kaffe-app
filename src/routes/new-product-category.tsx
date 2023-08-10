@@ -1,3 +1,4 @@
+import { useAuth } from "@/components/auth/auth-provider";
 import {
   CategoryForm,
   CategoryFormValues,
@@ -7,6 +8,8 @@ import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
 
 export const NewProductCategoryPage = () => {
+  const auth = useAuth();
+
   const handleSubmit = (values: CategoryFormValues) => {
     console.log(values);
   };
@@ -24,8 +27,11 @@ export const NewProductCategoryPage = () => {
         </div>
       </div>
 
-      <div className="py-6 px-4">
+      <div className="p-4">
         <CategoryForm
+          defaultValues={{
+            user_id: auth.getSession()?.user.id,
+          }}
           onSubmit={handleSubmit}
           actions={<Button>Submit</Button>}
         />

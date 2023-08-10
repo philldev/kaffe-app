@@ -19,7 +19,7 @@ import { PickPartial } from "@/lib/utils";
 export type CategoryFormValues = PickPartial<ProductCategory, "id">;
 
 interface CategoryFormProps {
-  defaultValues?: CategoryFormValues;
+  defaultValues?: Partial<CategoryFormValues>;
   actions?: ReactNode;
   onSubmit?: (values: CategoryFormValues) => void;
 }
@@ -27,6 +27,7 @@ interface CategoryFormProps {
 const schema = z.object({
   name: z.string(),
   description: z.string().optional(),
+  user_id: z.string(),
 });
 
 export const CategoryForm = (props: CategoryFormProps) => {
