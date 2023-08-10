@@ -13,6 +13,9 @@ import { SignupPage } from "./routes/signup";
 import { AccountPage } from "./routes/account";
 import { ProductsPage } from "./routes/products";
 import { OrdersPage } from "./routes/orders";
+import { NewProductPage } from "./routes/new-product";
+import { ProductCategoriesPage } from "./routes/product-categories";
+import { NewProductCategoryPage } from "./routes/new-product-category";
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +45,18 @@ export const router = createBrowserRouter([
           {
             path: "products",
             element: <ProductsPage />,
+          },
+          {
+            path: "products/categories",
+            element: <ProductCategoriesPage />,
+          },
+          {
+            path: "products/categories/new",
+            element: <NewProductCategoryPage />,
+          },
+          {
+            path: "products/new",
+            element: <NewProductPage />,
           },
           {
             path: "orders",

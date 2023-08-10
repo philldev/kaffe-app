@@ -41,13 +41,13 @@ const ProductsMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent collisionPadding={16}>
         <DropdownMenuItem>
-          <Link className="flex items-center" to="/products/new">
+          <Link className="flex items-center" to="new">
             <PlusIcon className="mr-2" />
             <span>Add Product</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link className="flex items-center" to="/products/categories">
+          <Link className="flex items-center" to="categories">
             <Pencil1Icon className="mr-2" />
             <span>Edit Categories</span>
           </Link>
