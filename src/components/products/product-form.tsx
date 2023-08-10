@@ -58,6 +58,31 @@ export const ProductForm = (props: ProductFormProps) => {
       >
         <FormField
           control={form.control}
+          name="category_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Category" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {new Array(10).fill("Category").map((item, index) => (
+                    <SelectItem key={index} value={item + index}>{`${item} ${
+                      index + 1
+                    }`}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
@@ -117,31 +142,6 @@ export const ProductForm = (props: ProductFormProps) => {
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="category_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {new Array(10).fill("Category").map((item, index) => (
-                    <SelectItem key={index} value={item + index}>{`${item} ${
-                      index + 1
-                    }`}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
               <FormMessage />
             </FormItem>
           )}
