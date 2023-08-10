@@ -12,6 +12,7 @@ import {
 import { SignupPage } from "./routes/signup";
 import { AccountPage } from "./routes/account";
 import { ProductsPage } from "./routes/products";
+import { OrdersPage } from "./routes/orders";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
           {
             path: "products",
             element: <ProductsPage />,
+          },
+          {
+            path: "orders",
+            element: <OrdersPage />,
           },
           {
             path: "*",
