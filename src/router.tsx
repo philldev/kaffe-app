@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { RootLayout } from "./routes/layout";
-import { LoginPage } from "./routes/login";
+import { LoginPage } from "./routes/auth/login";
 import { HomePage } from "./routes/home";
 import { NotFoundPage } from "./routes/404";
 import { AppLayout } from "./routes/app-layout";
@@ -9,15 +9,15 @@ import {
   AuthRoute,
   ProtectedRoute,
 } from "./components/auth/auth-provider";
-import { SignupPage } from "./routes/signup";
-import { AccountPage } from "./routes/account";
-import { ProductsPage } from "./routes/products";
-import { OrdersPage } from "./routes/orders";
-import { NewProductPage } from "./routes/new-product";
-import { ProductCategoriesPage } from "./routes/product-categories";
-import { NewProductCategoryPage } from "./routes/new-product-category";
-import { ProductDetailPage } from "./routes/product-detail";
-import { ProductCategoryDetailPage } from "./routes/product-category-detail";
+import { SignupPage } from "./routes/auth/signup";
+import { AccountPage } from "./routes/account/account";
+import { ProductsPage } from "./routes/products/products";
+import { OrdersPage } from "./routes/orders/orders";
+import { NewProductPage } from "./routes/products/new-product";
+import { ProductCategoriesPage } from "./routes/products/product-categories";
+import { NewProductCategoryPage } from "./routes/products/new-product-category";
+import { ProductDetailPage } from "./routes/products/product-detail";
+import { ProductCategoryDetailPage } from "./routes/products/product-category-detail";
 
 export const router = createBrowserRouter([
   {
