@@ -17,6 +17,7 @@ import { NewProductPage } from "./routes/new-product";
 import { ProductCategoriesPage } from "./routes/product-categories";
 import { NewProductCategoryPage } from "./routes/new-product-category";
 import { ProductDetailPage } from "./routes/product-detail";
+import { ProductCategoryDetailPage } from "./routes/product-category-detail";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
           {
             path: "products/categories",
             element: <ProductCategoriesPage />,
+          },
+          {
+            path: "products/categories/:id",
+            element: <ProductCategoryDetailPage />,
           },
           {
             path: "products/categories/new",

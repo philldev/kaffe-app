@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeftIcon, PlusIcon } from "@radix-ui/react-icons";
 import { IconSearch } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const ProductCategoriesPage = () => {
   return (
@@ -44,11 +44,17 @@ const SearchForm = () => {
 };
 
 const CategoryList = () => {
+  const navigate = useNavigate();
+
   return (
     <ScrollArea className="flex-1">
       <div className="p-4 grid gap-2">
         {new Array(10).fill("Category").map((label, index) => (
-          <Card>
+          <Card
+            onClick={() => {
+              navigate("1");
+            }}
+          >
             <CardHeader>
               <CardTitle>{`${label} ${index}`}</CardTitle>
             </CardHeader>
