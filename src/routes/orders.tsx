@@ -1,5 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { IconFilter } from "@tabler/icons-react";
 import {
@@ -12,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 
 export const OrdersPage = () => {
   return (
@@ -66,10 +72,15 @@ const ProductList = () => {
   return (
     <ScrollArea className="flex-1">
       <div className="p-4 grid gap-2">
-        {new Array(10).fill("Order").map((label, index) => (
-          <Card>
+        {new Array(10).fill("Order").map((_, index) => (
+          <Card key={index} className="relative">
+            <Badge variant="outline" className="text-xs absolute right-2 top-2">
+              New
+            </Badge>
             <CardHeader>
-              <CardTitle>{`${label} ${index + 1}`}</CardTitle>
+              <p className="text-xs">Date</p>
+              <CardTitle>Order-20231111-001</CardTitle>
+              <CardDescription>IDR 250,000</CardDescription>
             </CardHeader>
           </Card>
         ))}
