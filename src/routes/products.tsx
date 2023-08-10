@@ -1,5 +1,10 @@
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -98,6 +103,7 @@ const ProductList = () => {
           <Card>
             <CardHeader>
               <CardTitle>{`${label} ${index}`}</CardTitle>
+              <CardDescription>Category</CardDescription>
             </CardHeader>
           </Card>
         ))}
