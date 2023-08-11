@@ -5,7 +5,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -22,6 +22,8 @@ import { OverlaySpinner, Spinner } from "@/components/ui/spinner";
 import { useUpdateProductCategory } from "@/hooks/products/use-update-product-category";
 import { toast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/auth/auth-provider";
+import { useDeleteProductCategory } from "@/hooks/products/use-delete-product-category";
+import { useState } from "react";
 
 export const ProductCategoryDetailPage = () => {
   const params = useParams();
@@ -85,14 +87,38 @@ export const ProductCategoryDetailPage = () => {
 };
 
 const DeleteCategoryAlert = () => {
+  const [open, setOpen] = useState(false);
+  const params = useParams();
+  const navigate = useNavigate();
+  const mutation = useDeleteProductCategory({
+    onSuccess() {
+      toast({
+        title: "Category deleted successfully",
+      });
+      setOpen(false);
+      navigate("/products/categories");
+    },
+    onError() {
+      toast({
+        title: "Something went wrong! Please try again",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleClick = () => {
+    mutation.mutate(params.id!);
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button size="icon" variant="ghost">
           <IconTrash strokeWidth={1} />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
+        {mutation.isLoading && <OverlaySpinner />}
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
@@ -102,7 +128,9 @@ const DeleteCategoryAlert = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button variant="destructive">Continue</Button>
+          <Button variant="destructive" onClick={handleClick}>
+            Continue
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

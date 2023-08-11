@@ -8,16 +8,18 @@ import { OverlaySpinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/use-toast";
 import { useCreateProductCategory } from "@/hooks/products/use-create-product-category";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const NewProductCategoryPage = () => {
   const auth = useAuth();
+  const navigate = useNavigate();
 
   const mutation = useCreateProductCategory({
     onSuccess() {
       toast({
         title: "Category created successfully",
       });
+      navigate("/products/categories");
     },
     onError() {
       toast({
