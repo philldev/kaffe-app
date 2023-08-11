@@ -6,6 +6,7 @@ import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Toaster } from "./components/ui/toaster.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
+          <Toaster />
         </QueryClientProvider>
       </ThemeProvider>
     </SupabaseProvider>
