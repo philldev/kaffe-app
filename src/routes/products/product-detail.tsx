@@ -5,6 +5,17 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Product } from "@/types/product";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { IconTrash } from "@tabler/icons-react";
 
 export const ProductDetailPage = () => {
   const auth = useAuth();
@@ -30,6 +41,7 @@ export const ProductDetailPage = () => {
           </Button>
           <p className="font-semibold">Product Detail</p>
         </div>
+        <DeleteProductAlert />
       </div>
       <ScrollArea className="">
         <div className="py-2 px-4">
@@ -40,5 +52,30 @@ export const ProductDetailPage = () => {
         </div>
       </ScrollArea>
     </div>
+  );
+};
+
+const DeleteProductAlert = () => {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button size="icon" variant="ghost">
+          <IconTrash strokeWidth={1} />
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete your
+            product category and remove your data from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <Button variant="destructive">Continue</Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };

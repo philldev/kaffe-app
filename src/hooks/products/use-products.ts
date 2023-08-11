@@ -12,14 +12,14 @@ export const useProducts = () => {
   return useInfiniteQuery({
     enabled,
     queryKey: ["products", userId] as const,
-    async queryFn({ queryKey, pageParam = { cursor: 0 } }) {
+    async queryFn({ queryKey, pageParam = 0 }) {
       const [_, userId] = queryKey;
 
       const limit = 10;
 
       const range = {
-        from: pageParam.cursor * limit,
-        to: (pageParam.cursor + 1) * 10,
+        from: pageParam * limit,
+        to: (pageParam + 1) * 10,
       };
 
       const { data, error } = await supabase
@@ -31,15 +31,19 @@ export const useProducts = () => {
 
       if (error) throw error;
 
+      if (data.length === 0)
+        return {
+          data: [],
+        };
+
       return {
         data: data as Product[],
-        cursor: pageParam.cursor,
+        cursor: pageParam,
       };
     },
+
     getNextPageParam(lastPage) {
-      return {
-        cursor: lastPage.cursor + 1,
-      };
+      return lastPage.cursor ? lastPage.cursor + 1 : undefined;
     },
   });
 };

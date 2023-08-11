@@ -31,15 +31,19 @@ export const useProductCategories = () => {
 
       if (error) throw error;
 
+      if (data.length === 0)
+        return {
+          data: [],
+        };
+
       return {
         data: data as ProductCategory[],
-        cursor: pageParam.cursor,
+        cursor: pageParam,
       };
     },
+
     getNextPageParam(lastPage) {
-      return {
-        cursor: lastPage.cursor + 1,
-      };
+      return lastPage.cursor ? lastPage.cursor + 1 : undefined;
     },
   });
 };
