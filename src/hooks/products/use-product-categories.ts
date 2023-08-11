@@ -23,7 +23,7 @@ export const useProductCategories = () => {
       };
 
       const { data, error } = await supabase
-        .from("product-categories")
+        .from("product_categories")
         .select()
         .eq("user_id", userId)
         .range(range.from, range.to)

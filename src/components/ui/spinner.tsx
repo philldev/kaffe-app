@@ -1,10 +1,11 @@
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
-export const Spinner = () => {
+export const Spinner = ({ className }: { className?: string }) => {
   return (
     <div
-      className={clsx(
-        "animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent  rounded-full text-foreground"
+      className={cn(
+        "animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent  rounded-full text-foreground",
+        className
       )}
       role="status"
       aria-label="loading"
