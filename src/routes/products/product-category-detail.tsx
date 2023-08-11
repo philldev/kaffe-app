@@ -1,10 +1,11 @@
-import { useAuth } from "@/components/auth/auth-provider";
-import { CategoryForm } from "@/components/products/category-form";
+import {
+  CategoryForm,
+  CategoryFormValues,
+} from "@/components/products/category-form";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ProductCategory } from "@/types/product-category";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -16,19 +17,43 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { IconTrash } from "@tabler/icons-react";
+import { useProductCategory } from "@/hooks/products/use-product-category";
+import { OverlaySpinner, Spinner } from "@/components/ui/spinner";
+import { useUpdateProductCategory } from "@/hooks/products/use-update-product-category";
+import { toast } from "@/components/ui/use-toast";
+import { useAuth } from "@/components/auth/auth-provider";
 
 export const ProductCategoryDetailPage = () => {
+  const params = useParams();
   const auth = useAuth();
 
-  const category: Partial<ProductCategory> = {
-    id: "123",
-    user_id: auth.getSession()?.user.id,
-    description: "some description",
-    name: "Drink",
+  const query = useProductCategory(params.id);
+
+  const mutation = useUpdateProductCategory({
+    onSuccess() {
+      toast({
+        title: "Category updated successfully",
+      });
+    },
+    onError() {
+      toast({
+        title: "Something went wrong! Please try again",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleSubmit = (values: CategoryFormValues) => {
+    mutation.mutate({
+      ...values,
+      id: params.id,
+      user_id: auth.getSession()?.user.id,
+    });
   };
 
   return (
     <div className="flex flex-col overflow-hidden h-[calc(100vh-60px)]">
+      {mutation.isLoading && <OverlaySpinner />}
       <div className="p-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <Button size="icon" variant="ghost">
@@ -42,10 +67,17 @@ export const ProductCategoryDetailPage = () => {
       </div>
       <ScrollArea className="">
         <div className="py-2 px-4">
-          <CategoryForm
-            defaultValues={category}
-            actions={<Button>Submit</Button>}
-          />
+          {query.isLoading ? (
+            <div className="p-4 flex justify-center">
+              <Spinner />
+            </div>
+          ) : (
+            <CategoryForm
+              defaultValues={query.data}
+              onSubmit={handleSubmit}
+              actions={<Button>Submit</Button>}
+            />
+          )}
         </div>
       </ScrollArea>
     </div>
