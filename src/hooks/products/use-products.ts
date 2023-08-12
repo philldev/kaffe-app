@@ -1,6 +1,7 @@
 import { useAuth } from "@/components/auth/auth-provider";
 import { useSupabase } from "@/lib/supabase";
 import { Product } from "@/types/product";
+import { useState } from "react";
 import { useInfiniteQuery } from "react-query";
 
 export const useProducts = () => {
@@ -9,11 +10,13 @@ export const useProducts = () => {
   const userId = auth.getSession()?.user.id;
   const enabled = !!userId;
 
-  return useInfiniteQuery({
+  const [categoryId, setCategoryId] = useState<string>();
+
+  const query = useInfiniteQuery({
     enabled,
-    queryKey: ["products", userId] as const,
+    queryKey: ["products", userId, categoryId] as const,
     async queryFn({ queryKey, pageParam = 0 }) {
-      const [_, userId] = queryKey;
+      const [_, userId, categoryId] = queryKey;
 
       const limit = 10;
 
@@ -26,6 +29,7 @@ export const useProducts = () => {
         .from("products")
         .select()
         .eq("user_id", userId)
+        .eq(categoryId ? "category_id" : "", categoryId)
         .range(range.from, range.to)
         .throwOnError();
 
@@ -46,4 +50,16 @@ export const useProducts = () => {
       return lastPage.cursor ? lastPage.cursor + 1 : undefined;
     },
   });
+
+  return {
+    ...query,
+    categoryId,
+    setCategoryId,
+    allData: query.data?.pages.reduce<Product[]>((prev, current) => {
+      if (current.data) {
+        return [...prev, ...current.data];
+      }
+      return prev;
+    }, []),
+  };
 };
