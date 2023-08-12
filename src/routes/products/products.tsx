@@ -22,9 +22,12 @@ import {
   PlusIcon,
 } from "@radix-ui/react-icons";
 import { IconSearch } from "@tabler/icons-react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export const ProductsPage = () => {
+  const [category, setCategory] = useState<string>();
+
   return (
     <div className="flex flex-col overflow-hidden h-[calc(100vh-60px)]">
       <div className="p-4 flex items-center justify-between gap-4">
@@ -32,7 +35,7 @@ export const ProductsPage = () => {
         <ProductsMenu />
       </div>
       <SearchForm />
-      <ProductCategoryTabs />
+      <ProductCategoryTabs onChange={setCategory} value={category} />
       <ProductList />
     </div>
   );
@@ -77,7 +80,13 @@ const SearchForm = () => {
   );
 };
 
-const ProductCategoryTabs = () => {
+const ProductCategoryTabs = ({
+  value,
+  onChange = () => {},
+}: {
+  value?: string;
+  onChange?: (val?: string) => void;
+}) => {
   const query = useProductCategories({
     limit: 50,
   });
@@ -85,10 +94,15 @@ const ProductCategoryTabs = () => {
   const itemsView = query.allData?.map((item, index) => (
     <button
       key={index}
+      onClick={() => {
+        if (item.id === value) onChange();
+        else onChange(item.id);
+      }}
       className={cn(
+        "border-transparent border",
         buttonVariants({
           size: "sm",
-          variant: "outline",
+          variant: item.id === value ? "default" : "outline",
         }),
         "max-w-max min-w-max snap-start"
       )}
