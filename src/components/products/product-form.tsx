@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useProductCategories } from "@/hooks/products/use-product-categories";
 
 export type ProductFormValues = PickPartial<Product, "id">;
 
@@ -69,11 +70,7 @@ export const ProductForm = (props: ProductFormProps) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {new Array(10).fill("Category").map((item, index) => (
-                    <SelectItem key={index} value={item + index}>{`${item} ${
-                      index + 1
-                    }`}</SelectItem>
-                  ))}
+                  <ProductCategoriesSelectItems />
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -151,4 +148,16 @@ export const ProductForm = (props: ProductFormProps) => {
       </form>
     </Form>
   );
+};
+
+const ProductCategoriesSelectItems = () => {
+  const query = useProductCategories({
+    limit: 99,
+  });
+
+  return query.allData?.map((item, index) => (
+    <SelectItem key={index} value={item.id}>
+      {item.name}
+    </SelectItem>
+  ));
 };
