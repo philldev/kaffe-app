@@ -177,7 +177,7 @@ const ProductList = ({
     <Card
       key={index}
       onClick={() => {
-        navigate("1");
+        navigate(item.id);
       }}
     >
       <CardHeader>
