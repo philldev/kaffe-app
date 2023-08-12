@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { useProductCategories } from "@/hooks/products/use-product-categories";
+import { createArray } from "@/lib/utils";
 import { ProductCategory } from "@/types/product-category";
 import { ChevronLeftIcon, PlusIcon } from "@radix-ui/react-icons";
 import { IconSearch } from "@tabler/icons-react";
@@ -33,6 +35,8 @@ export const ProductCategoriesPage = () => {
       <SearchForm />
 
       <CategoryList
+        isLoading={query.isLoading}
+        isSuccess={query.isSuccess}
         hasMore={query.hasNextPage}
         onLoadMore={query.fetchNextPage}
         loadingMore={query.isFetchingNextPage}
@@ -60,32 +64,47 @@ const CategoryList = ({
   onLoadMore,
   hasMore,
   loadingMore,
+  isLoading,
+  isSuccess,
 }: {
   onLoadMore?: () => void;
   hasMore?: boolean;
   loadingMore?: boolean;
+  isLoading?: boolean;
+  isSuccess?: boolean;
   data?: ProductCategory[];
 }) => {
   const navigate = useNavigate();
+  const empty = data.length === 0;
+
+  const itemsView = data.map((item) => (
+    <Card
+      onClick={() => {
+        navigate(`${item.id}`);
+      }}
+    >
+      <CardHeader>
+        <CardTitle>{item.name}</CardTitle>
+      </CardHeader>
+    </Card>
+  ));
+
+  const loadingView = createArray(5).map((_, index) => (
+    <Skeleton key={index} className="h-[77.5px] w-full" />
+  ));
+
+  const emptyView = <p className="text-muted-foreground">Category is empty</p>;
 
   return (
     <ScrollArea className="flex-1">
       <div className="p-4 grid gap-2">
-        {data.map((item) => (
-          <Card
-            onClick={() => {
-              navigate(`${item.id}`);
-            }}
-          >
-            <CardHeader>
-              <CardTitle>{item.name}</CardTitle>
-            </CardHeader>
-          </Card>
-        ))}
+        {isLoading ? loadingView : null}
+        {isSuccess ? itemsView : null}
+        {empty ? emptyView : null}
       </div>
       <div className="px-4">
         <Button
-          disabled={!hasMore}
+          disabled={!hasMore || empty}
           onClick={onLoadMore}
           className="w-full"
           variant="secondary"
