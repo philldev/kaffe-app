@@ -36,12 +36,7 @@ export const ProductCategoriesPage = () => {
         hasMore={query.hasNextPage}
         onLoadMore={query.fetchNextPage}
         loadingMore={query.isFetchingNextPage}
-        data={query.data?.pages.reduce<ProductCategory[]>((prev, current) => {
-          if (current.data) {
-            return [...prev, ...current.data];
-          }
-          return prev;
-        }, [])}
+        data={query.allData}
       />
     </div>
   );

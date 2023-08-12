@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useProductCategories } from "@/hooks/products/use-product-categories";
+import { cn, createArray } from "@/lib/utils";
 import {
   HamburgerMenuIcon,
   Pencil1Icon,
@@ -30,7 +32,7 @@ export const ProductsPage = () => {
         <ProductsMenu />
       </div>
       <SearchForm />
-      <CategoryTabs />
+      <ProductCategoryTabs />
       <ProductList />
     </div>
   );
@@ -75,21 +77,53 @@ const SearchForm = () => {
   );
 };
 
-const CategoryTabs = () => {
+const ProductCategoryTabs = () => {
+  const query = useProductCategories({
+    limit: 50,
+  });
+
+  const itemsView = query.allData?.map((item, index) => (
+    <button
+      key={index}
+      className={cn(
+        buttonVariants({
+          size: "sm",
+          variant: "outline",
+        }),
+        "max-w-max min-w-max snap-start"
+      )}
+    >
+      {item.name}
+    </button>
+  ));
+
+  const loadingView = createArray(5).map((_, index) => (
+    <div key={index}>
+      <Skeleton className="h-[40px] w-[100px]" />
+    </div>
+  ));
+
+  const emptyView = (
+    <Link
+      to="/products/categories/new"
+      className={cn(
+        buttonVariants({
+          size: "sm",
+          variant: "outline",
+        }),
+        "max-w-max min-w-max snap-start"
+      )}
+    >
+      Create category
+    </Link>
+  );
+
   return (
     <div className="py-2 w-screen">
       <div className="flex gap-4 px-4 overflow-x-auto scroll-pl-4 snap-x">
-        {new Array(10).fill("Category").map((label, index) => (
-          <button
-            className={cn(
-              buttonVariants({
-                size: "sm",
-                variant: "outline",
-              }),
-              "max-w-max min-w-max snap-start"
-            )}
-          >{`${label} ${index}`}</button>
-        ))}
+        {query.isLoading ? loadingView : null}
+        {query.isSuccess ? itemsView : null}
+        {query.allData?.length === 0 ? emptyView : null}
       </div>
     </div>
   );

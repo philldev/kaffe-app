@@ -7,3 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export type PickPartial<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>> &
   Partial<Pick<T, K>>;
+
+export function createArray<T>(length: number, value?: T) {
+  return new Array(length).fill(value ?? 0);
+}

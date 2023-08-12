@@ -3,19 +3,17 @@ import { useSupabase } from "@/lib/supabase";
 import { ProductCategory } from "@/types/product-category";
 import { useInfiniteQuery } from "react-query";
 
-export const useProductCategories = () => {
+export const useProductCategories = (input?: { limit?: number }) => {
   const supabase = useSupabase();
   const auth = useAuth();
   const userId = auth.getSession()?.user.id;
   const enabled = !!userId;
 
-  return useInfiniteQuery({
+  const query = useInfiniteQuery({
     enabled,
-    queryKey: ["product-categories", userId] as const,
+    queryKey: ["product-categories", userId, input?.limit ?? 10] as const,
     async queryFn({ queryKey, pageParam = { cursor: 0 } }) {
-      const [_, userId] = queryKey;
-
-      const limit = 10;
+      const [_, userId, limit] = queryKey;
 
       const range = {
         from: pageParam.cursor * limit,
@@ -46,4 +44,14 @@ export const useProductCategories = () => {
       return lastPage.cursor ? lastPage.cursor + 1 : undefined;
     },
   });
+
+  return {
+    ...query,
+    allData: query.data?.pages.reduce<ProductCategory[]>((prev, current) => {
+      if (current.data) {
+        return [...prev, ...current.data];
+      }
+      return prev;
+    }, []),
+  };
 };
