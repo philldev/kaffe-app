@@ -35,7 +35,7 @@ export const NewProductPage = () => {
   const countQuery = useProductsCount();
 
   const handleSubmit = (values: ProductFormValues) => {
-    if (!countQuery.data) return;
+    if (countQuery.data === null || countQuery.data === undefined) return;
 
     const limitReached = countQuery.data === ProductConfig.CREATE_PRODUCT_LIMIT;
 

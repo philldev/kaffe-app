@@ -48,6 +48,7 @@ export const ProductForm = (props: ProductFormProps) => {
   });
 
   const onSubmit = (values: ProductFormValues) => {
+    console.log(values);
     props.onSubmit?.(values);
   };
 
