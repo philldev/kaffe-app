@@ -1,9 +1,9 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
-  IconBox,
   IconClipboardList,
   IconHome,
+  IconPackages,
   IconUser,
 } from "@tabler/icons-react";
 import { NavLink, Outlet } from "react-router-dom";
@@ -27,7 +27,7 @@ const menus = [
     path: "/orders",
   },
   {
-    Icon: IconBox,
+    Icon: IconPackages,
     path: "/products",
   },
   {
