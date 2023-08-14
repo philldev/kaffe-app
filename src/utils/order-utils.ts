@@ -1,5 +1,12 @@
 import { Order } from "@/types/order";
 
+export const orderStatusItems: Order["status"][] = [
+  "waiting_for_payment",
+  "new",
+  "completed",
+  "canceled",
+];
+
 export function getStatusLabel(status: Order["status"]) {
   switch (status) {
     case "new":

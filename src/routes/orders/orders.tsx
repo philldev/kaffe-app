@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { IconFilter } from "@tabler/icons-react";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
@@ -20,6 +21,8 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import { getStatusLabel, orderStatusItems } from "@/utils/order-utils";
+import { Order } from "@/types/order";
 
 export const OrdersPage = () => {
   return (
@@ -47,8 +50,14 @@ export const OrdersPage = () => {
 };
 
 const Filter = () => {
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState<Record<Order["status"], boolean>>({
+    new: false,
+    canceled: false,
+    completed: false,
+    waiting_for_payment: false,
+  });
   const [dateRange, setDateRange] = useState("today");
+
   return (
     <DropdownMenu dir="ltr">
       <DropdownMenuTrigger asChild>
@@ -59,15 +68,20 @@ const Filter = () => {
       <DropdownMenuContent className="w-[250px]" collisionPadding={16}>
         <DropdownMenuLabel>Status</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup value={status} onValueChange={setStatus}>
-          <DropdownMenuRadioItem value="new">New</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="completed">
-            Completed
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="canceled">
-            Canceled
-          </DropdownMenuRadioItem>
-        </DropdownMenuRadioGroup>
+        {orderStatusItems.map((item) => (
+          <DropdownMenuCheckboxItem
+            key={item}
+            checked={status[item]}
+            onCheckedChange={(val) => {
+              setStatus((prev) => ({
+                ...prev,
+                [item]: val,
+              }));
+            }}
+          >
+            {getStatusLabel(item)}
+          </DropdownMenuCheckboxItem>
+        ))}
         <DropdownMenuSeparator />
         <DropdownMenuLabel>Date Range</DropdownMenuLabel>
         <DropdownMenuSeparator />
