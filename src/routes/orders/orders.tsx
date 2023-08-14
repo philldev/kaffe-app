@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 export const OrdersPage = () => {
   return (
@@ -27,6 +29,19 @@ export const OrdersPage = () => {
         <Filter />
       </div>
       <ProductList />
+      <div className="p-4">
+        <Link
+          to="/orders/new"
+          className={cn(
+            buttonVariants({
+              variant: "default",
+            }),
+            "w-full"
+          )}
+        >
+          New Order
+        </Link>
+      </div>
     </div>
   );
 };
