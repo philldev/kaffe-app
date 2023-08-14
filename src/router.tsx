@@ -18,6 +18,7 @@ import { ProductCategoriesPage } from "./routes/products/product-categories";
 import { NewProductCategoryPage } from "./routes/products/new-product-category";
 import { ProductDetailPage } from "./routes/products/product-detail";
 import { ProductCategoryDetailPage } from "./routes/products/product-category-detail";
+import { NewOrderPage } from "./routes/orders/new-order";
 
 export const router = createBrowserRouter([
   {
@@ -71,6 +72,10 @@ export const router = createBrowserRouter([
           {
             path: "orders",
             element: <OrdersPage />,
+          },
+          {
+            path: "orders/new",
+            element: <NewOrderPage />,
           },
           {
             path: "*",
