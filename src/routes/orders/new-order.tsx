@@ -7,6 +7,11 @@ import { createArray } from "@/lib/utils";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useProducts } from "@/hooks/products/use-products";
+import { SearchForm } from "@/components/products/search-form";
+import { ProductCategoryTabs } from "@/components/products/product-category-tabs";
+import { ProductList } from "@/components/products/product-list";
 
 export const NewOrderPage = () => {
   const isLoading = false;
@@ -59,9 +64,7 @@ export const NewOrderPage = () => {
                 </div>
               ))}
             </div>
-            <Button variant="outline" size="sm" className="w-full">
-              Add Items
-            </Button>
+            <AddItemsSheet />
           </div>
 
           <div>
@@ -74,5 +77,34 @@ export const NewOrderPage = () => {
         <Button className="w-full">Create Order</Button>
       </div>
     </div>
+  );
+};
+
+const AddItemsSheet = () => {
+  const query = useProducts();
+
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline" size="sm" className="w-full">
+          Add Items
+        </Button>
+      </SheetTrigger>
+      <SheetContent className="h-[90vh] px-0 pt-8" side="bottom">
+        <SearchForm />
+        <ProductCategoryTabs
+          onChange={query.setCategoryId}
+          value={query.categoryId}
+        />
+        <ProductList
+          data={query.allData}
+          isLoading={query.isLoading}
+          isSuccess={query.isSuccess}
+          hasMore={query.hasNextPage}
+          loadingMore={query.isFetchingNextPage}
+          onLoadMore={query.fetchNextPage}
+        />
+      </SheetContent>
+    </Sheet>
   );
 };
