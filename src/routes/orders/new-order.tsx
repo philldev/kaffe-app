@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { OverlaySpinner } from "@/components/ui/spinner";
-import { createArray } from "@/lib/utils";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
@@ -51,25 +50,56 @@ export const NewOrderPage = () => {
           <div className="flex flex-col gap-2">
             <Label>Items</Label>
             <div className="flex flex-col gap-1">
-              {createArray(5).map((_, index) => (
-                <div key={index} className="flex justify-between gap-2">
-                  <span className="flex-1">Potato x 1</span>
-                  <span>IDR 15K</span>
+              {orderItems.items.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between gap-2 text-xs"
+                >
+                  <div className="flex-1 flex flex-col">
+                    <span>{item.product.name}</span>
+                    <span className="font-bold">
+                      {item.product.price_currency} {item.product.price}
+                    </span>
+                  </div>
+                  <span>x {item.quantity}</span>
                   <div>
-                    <Button variant="ghost" size="icon" className="w-5 h-5">
+                    <Button
+                      onClick={() => {
+                        orderItems.increment(item.product.id);
+                      }}
+                      variant="ghost"
+                      size="icon"
+                      className="w-5 h-5"
+                    >
                       <IconPlus strokeWidth={1} className="w-3 h-3" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="w-5 h-5">
+
+                    <Button
+                      onClick={() => {
+                        orderItems.decrement(item.product.id);
+                      }}
+                      variant="ghost"
+                      size="icon"
+                      className="w-5 h-5"
+                    >
                       <IconMinus strokeWidth={1} className="w-3 h-3" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="w-5 h-5">
+
+                    <Button
+                      onClick={() => {
+                        orderItems.remove(item.product.id);
+                      }}
+                      variant="ghost"
+                      size="icon"
+                      className="w-5 h-5"
+                    >
                       <IconTrash strokeWidth={1} className="w-3 h-3" />
                     </Button>
                   </div>
                 </div>
               ))}
             </div>
-            <AddItemsSheet />
+            <AddItemsSheet onAddItem={orderItems.addItem} />
           </div>
 
           <div>
@@ -85,7 +115,11 @@ export const NewOrderPage = () => {
   );
 };
 
-const AddItemsSheet = () => {
+const AddItemsSheet = ({
+  onAddItem,
+}: {
+  onAddItem: (product: Product) => void;
+}) => {
   const query = useProducts();
   const [open, setOpen] = useState(false);
 
@@ -111,8 +145,8 @@ const AddItemsSheet = () => {
           onLoadMore={query.fetchNextPage}
           showAddButton
           onAddClick={(product) => {
-            console.log("add item", product.id);
             setOpen(false);
+            onAddItem(product);
           }}
         />
       </SheetContent>
@@ -156,16 +190,27 @@ const useOrderItems = () => {
   const addItem = (product: Product) => {
     const found = items.value.find((i) => i.product.id === product.id);
 
-    if (found) return;
+    if (found) {
+      increment(found.product.id);
+    } else {
+      items.add({
+        product,
+        quantity: 1,
+      });
+    }
+  };
 
-    items.add({
-      product,
-      quantity: 1,
-    });
+  const remove = (id: string) => {
+    const index = items.value.findIndex((i) => i.product.id === id);
+
+    if (index >= 0) {
+      items.remove(index);
+    }
   };
 
   return {
     items: items.value,
+    remove,
     addItem,
     increment,
     decrement,
