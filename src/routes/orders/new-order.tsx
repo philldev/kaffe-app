@@ -12,9 +12,14 @@ import { useProducts } from "@/hooks/products/use-products";
 import { SearchForm } from "@/components/products/search-form";
 import { ProductCategoryTabs } from "@/components/products/product-category-tabs";
 import { ProductList } from "@/components/products/product-list";
+import { useState } from "react";
+import { OrderItem } from "@/types/order";
+import { useArrayState } from "@/hooks/use-array-state";
+import { Product } from "@/types/product";
 
 export const NewOrderPage = () => {
   const isLoading = false;
+  const orderItems = useOrderItems();
 
   return (
     <div className="flex flex-col overflow-hidden h-[calc(100vh-60px)]">
@@ -82,9 +87,10 @@ export const NewOrderPage = () => {
 
 const AddItemsSheet = () => {
   const query = useProducts();
+  const [open, setOpen] = useState(false);
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="outline" size="sm" className="w-full">
           Add Items
@@ -103,8 +109,65 @@ const AddItemsSheet = () => {
           hasMore={query.hasNextPage}
           loadingMore={query.isFetchingNextPage}
           onLoadMore={query.fetchNextPage}
+          showAddButton
+          onAddClick={(product) => {
+            console.log("add item", product.id);
+            setOpen(false);
+          }}
         />
       </SheetContent>
     </Sheet>
   );
+};
+
+const useOrderItems = () => {
+  const items = useArrayState<OrderItem>([]);
+
+  const increment = (id: string) => {
+    const found = items.value.find((i) => i.product.id === id);
+    if (!found) return;
+    items.updateItem(
+      (item) => item.product.id === id,
+      (old) => ({
+        ...old,
+        quantity: old.quantity + 1,
+      })
+    );
+  };
+
+  const decrement = (id: string) => {
+    const found = items.value.find((i) => i.product.id === id);
+    if (!found) return;
+
+    if (found.quantity <= 1) {
+      const index = items.value.findIndex((i) => i.product.id === id);
+      items.remove(index);
+    } else {
+      items.updateItem(
+        (item) => item.product.id === id,
+        (old) => ({
+          ...old,
+          quantity: old.quantity - 1,
+        })
+      );
+    }
+  };
+
+  const addItem = (product: Product) => {
+    const found = items.value.find((i) => i.product.id === product.id);
+
+    if (found) return;
+
+    items.add({
+      product,
+      quantity: 1,
+    });
+  };
+
+  return {
+    items: items.value,
+    addItem,
+    increment,
+    decrement,
+  };
 };
