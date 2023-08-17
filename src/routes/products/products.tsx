@@ -14,10 +14,11 @@ import {
   Pencil1Icon,
   PlusIcon,
 } from "@radix-ui/react-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const ProductsPage = () => {
   const query = useProducts();
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col overflow-hidden h-[calc(100vh-60px)]">
@@ -37,6 +38,9 @@ export const ProductsPage = () => {
         hasMore={query.hasNextPage}
         loadingMore={query.isFetchingNextPage}
         onLoadMore={query.fetchNextPage}
+        onItemClick={(product) => {
+          navigate(product.id);
+        }}
       />
     </div>
   );
