@@ -1,6 +1,12 @@
 import { Product } from "@/types/product";
-import { Link, useNavigate } from "react-router-dom";
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Link } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
@@ -14,6 +20,9 @@ export const ProductList = ({
   loadingMore,
   isLoading,
   isSuccess,
+  onItemClick = () => {},
+  onAddClick = () => {},
+  showAddButton,
 }: {
   onLoadMore?: () => void;
   hasMore?: boolean;
@@ -21,15 +30,17 @@ export const ProductList = ({
   isLoading?: boolean;
   isSuccess?: boolean;
   data?: Product[];
+  showAddButton?: boolean;
+  onAddClick?: (product: Product) => void;
+  onItemClick?: (product: Product) => void;
 }) => {
-  const navigate = useNavigate();
   const empty = data.length === 0;
 
   const itemsView = data.map((item, index) => (
     <Card
       key={index}
       onClick={() => {
-        navigate(item.id);
+        onItemClick(item);
       }}
     >
       <CardHeader>
@@ -38,6 +49,18 @@ export const ProductList = ({
           {item.price_currency} {item.price}
         </CardDescription>
       </CardHeader>
+      {showAddButton ? (
+        <CardContent>
+          <Button
+            variant="outline"
+            onClick={() => {
+              onAddClick(item);
+            }}
+          >
+            Add
+          </Button>
+        </CardContent>
+      ) : null}
     </Card>
   ));
 
