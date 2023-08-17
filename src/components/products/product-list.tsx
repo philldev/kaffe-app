@@ -1,17 +1,11 @@
 import { Product } from "@/types/product";
 import { Link } from "react-router-dom";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
 import { Spinner } from "../ui/spinner";
-import { createArray } from "@/lib/utils";
+import { cn, createArray } from "@/lib/utils";
 
 export const ProductList = ({
   data = [],
@@ -43,14 +37,12 @@ export const ProductList = ({
         onItemClick(item);
       }}
     >
-      <CardHeader>
+      <CardHeader className={cn(showAddButton ? "p-4" : "")}>
         <CardTitle>{item.name}</CardTitle>
         <CardDescription>
           {item.price_currency} {item.price}
         </CardDescription>
-      </CardHeader>
-      {showAddButton ? (
-        <CardContent>
+        {showAddButton ? (
           <Button
             variant="outline"
             onClick={() => {
@@ -59,8 +51,8 @@ export const ProductList = ({
           >
             Add
           </Button>
-        </CardContent>
-      ) : null}
+        ) : null}
+      </CardHeader>
     </Card>
   ));
 
