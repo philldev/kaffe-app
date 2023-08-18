@@ -19,6 +19,7 @@ import { Product } from "@/types/product";
 export const NewOrderPage = () => {
   const isLoading = false;
   const orderItems = useOrderItems();
+  const [customerName, setCustomerName] = useState("");
 
   return (
     <div className="flex flex-col overflow-hidden h-[calc(100vh-60px)]">
@@ -35,17 +36,14 @@ export const NewOrderPage = () => {
       </div>
       <ScrollArea className="flex-1">
         <div className="py-2 px-4 flex flex-col gap-4">
-          <div>
-            <Label>Date</Label>
-            <p className="text-muted-foreground">Order 2202202-001</p>
-          </div>
-          <div>
-            <Label>Order Number</Label>
-            <p className="text-muted-foreground">Order 2202202-001</p>
-          </div>
           <div className="flex flex-col gap-2">
             <Label>Customer name</Label>
-            <Input />
+            <Input
+              className="h-[40px]"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              placeholder="Enter customer name"
+            />
           </div>
           <div className="flex flex-col gap-2">
             <Label>Items</Label>
@@ -57,9 +55,7 @@ export const NewOrderPage = () => {
                 >
                   <div className="flex-1 flex flex-col">
                     <span>{item.product.name}</span>
-                    <span className="font-bold">
-                      {item.product.price_currency} {item.product.price}
-                    </span>
+                    <span className="font-bold">IDR {item.product.price}</span>
                   </div>
                   <span>x {item.quantity}</span>
                   <div>
@@ -104,7 +100,9 @@ export const NewOrderPage = () => {
 
           <div>
             <Label>Total</Label>
-            <p className="text-muted-foreground text-2xl">IDR 150,000</p>
+            <p className="text-muted-foreground text-2xl">
+              IDR {orderItems.getTotal()}
+            </p>
           </div>
         </div>
       </ScrollArea>
@@ -208,11 +206,18 @@ const useOrderItems = () => {
     }
   };
 
+  const getTotal = () => {
+    return items.value.reduce((prev, current) => {
+      return prev + current.quantity * current.product.price;
+    }, 0);
+  };
+
   return {
     items: items.value,
     remove,
     addItem,
     increment,
     decrement,
+    getTotal,
   };
 };

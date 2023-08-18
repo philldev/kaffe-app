@@ -38,7 +38,6 @@ const schema = z.object({
   user_id: z.string(),
   category_id: z.string(),
   price: z.number(),
-  price_currency: z.string(),
 });
 
 export const ProductForm = (props: ProductFormProps) => {
@@ -48,7 +47,6 @@ export const ProductForm = (props: ProductFormProps) => {
   });
 
   const onSubmit = (values: ProductFormValues) => {
-    console.log(values);
     props.onSubmit?.(values);
   };
 
@@ -125,20 +123,6 @@ export const ProductForm = (props: ProductFormProps) => {
                     else field.onChange(Number(value));
                   }}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="price_currency"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Currency</FormLabel>
-              <FormControl>
-                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
