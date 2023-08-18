@@ -8,7 +8,6 @@ export interface Order {
   status: "new" | "completed" | "canceled";
   summary: {
     items: OrderItem[];
-    totalFormatted: string;
     total: number;
   };
 }
