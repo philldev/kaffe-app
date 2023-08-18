@@ -5,7 +5,7 @@ export interface Order {
   customer_name: string;
   order_number: string;
   created_at: string;
-  status: "waiting_for_payment" | "new" | "completed" | "canceled";
+  status: "new" | "completed" | "canceled";
   summary: {
     items: OrderItem[];
     totalFormatted: string;
