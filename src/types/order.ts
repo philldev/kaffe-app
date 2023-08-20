@@ -5,6 +5,7 @@ export interface Order {
   customer_name: string;
   order_number: string;
   created_at: string;
+  user_id: string;
   status: "new" | "completed" | "canceled";
   summary: {
     items: OrderItem[];

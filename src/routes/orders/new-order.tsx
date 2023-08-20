@@ -43,12 +43,14 @@ export const NewOrderPage = () => {
   const isLoading = mutation.isLoading;
 
   const handleCreateOrder = () => {
-    mutation.mutate({
-      userId: auth.getSession()?.user.id!,
-      items: orderItems.items,
-      total: orderItems.getTotal(),
-      customer_name: customerName,
-    });
+    const userId = auth.getSession()?.user.id;
+    if (userId)
+      mutation.mutate({
+        userId,
+        items: orderItems.items,
+        total: orderItems.getTotal(),
+        customer_name: customerName,
+      });
   };
 
   return (

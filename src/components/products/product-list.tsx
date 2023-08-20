@@ -39,9 +39,7 @@ export const ProductList = ({
     >
       <CardHeader className={cn(showAddButton ? "p-4" : "")}>
         <CardTitle>{item.name}</CardTitle>
-        <CardDescription>
-          {item.price_currency} {item.price}
-        </CardDescription>
+        <CardDescription>IDR {item.price}</CardDescription>
         {showAddButton ? (
           <Button
             variant="outline"

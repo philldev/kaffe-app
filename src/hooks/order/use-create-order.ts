@@ -47,6 +47,7 @@ export const useCreateOrder = (
       const newOrder: Omit<Order, "id" | "created_at"> = {
         customer_name: values.customer_name,
         order_number: orderNumber,
+        user_id: values.userId,
         status: "new",
         summary: {
           items: values.items,
