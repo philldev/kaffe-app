@@ -5,7 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { OverlaySpinner } from "@/components/ui/spinner";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useProducts } from "@/hooks/products/use-products";
 import { SearchForm } from "@/components/products/search-form";
@@ -15,11 +15,41 @@ import { useState } from "react";
 import { OrderItem } from "@/types/order";
 import { useArrayState } from "@/hooks/use-array-state";
 import { Product } from "@/types/product";
+import { useCreateOrder } from "@/hooks/order/use-create-order";
+import { useAuth } from "@/components/auth/auth-provider";
+import { toast } from "@/components/ui/use-toast";
 
 export const NewOrderPage = () => {
-  const isLoading = false;
   const orderItems = useOrderItems();
   const [customerName, setCustomerName] = useState("");
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  const mutation = useCreateOrder({
+    onSuccess() {
+      toast({
+        title: "Order created successfully",
+      });
+      navigate("/orders");
+    },
+    onError() {
+      toast({
+        title: "Something went wrong! Please try again",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const isLoading = mutation.isLoading;
+
+  const handleCreateOrder = () => {
+    mutation.mutate({
+      userId: auth.getSession()?.user.id!,
+      items: orderItems.items,
+      total: orderItems.getTotal(),
+      customer_name: customerName,
+    });
+  };
 
   return (
     <div className="flex flex-col overflow-hidden h-[calc(100vh-60px)]">
@@ -107,7 +137,9 @@ export const NewOrderPage = () => {
         </div>
       </ScrollArea>
       <div className="p-4 flex flex-col gap-4">
-        <Button className="w-full">Create Order</Button>
+        <Button onClick={handleCreateOrder} className="w-full">
+          Create Order
+        </Button>
       </div>
     </div>
   );
