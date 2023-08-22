@@ -1,7 +1,11 @@
 import { useAuth } from "@/components/auth/auth-provider";
 import { useSupabase } from "@/lib/supabase";
 import { Order } from "@/types/order";
-import { OrdersDateRange, getStartAndEndDateRange } from "@/utils/order-utils";
+import {
+  OrdersDateRange,
+  getStartAndEndDateRange,
+  getStatusArr,
+} from "@/utils/order-utils";
 import { useState } from "react";
 import { useInfiniteQuery } from "react-query";
 
@@ -33,13 +37,13 @@ export const useOrders = () => {
         to: (pageParam + 1) * 0,
       };
 
+      const statusArr = getStatusArr(status);
+
       const { data, error } = await supabase
         .from("orders")
         .select()
         .eq("user_id", userId)
-        .eq(status.new ? "status" : "", "new")
-        .eq(status.canceled ? "status" : "", "canceled")
-        .eq(status.completed ? "status" : "", "completed")
+        .eq("status", statusArr)
         .filter("created_at", "gte", startDate.toISOString())
         .filter("created_at", "lte", endDate.toISOString())
         .range(range.from, range.to)

@@ -110,3 +110,17 @@ export function getStartAndEndDateOfMonth() {
 
   return { startDate, endDate };
 }
+
+export function getStatusArr(status: Record<Order["status"], boolean>) {
+  const arr: Order["status"][] = [];
+  for (const key in status) {
+    if (status.hasOwnProperty(key)) {
+      let _key = key as Order["status"];
+
+      if (status[_key]) {
+        arr.push(_key);
+      }
+    }
+  }
+  return arr;
+}

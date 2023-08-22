@@ -23,6 +23,7 @@ import { Link } from "react-router-dom";
 import {
   OrdersDateRange,
   getDateRangeLabel,
+  getStatusArr,
   getStatusLabel,
   orderStatusItems,
   ordersDateRangeList,
@@ -45,6 +46,12 @@ export const OrdersPage = () => {
           setDateRange={query.setDateRange}
         />
       </div>
+      <FilterDisplay
+        setDateRange={query.setDateRange}
+        setStatus={query.setStatus}
+        status={query.status}
+        dateRange={query.dateRange}
+      />
       <OrderList
         data={query.allData}
         isLoading={query.isLoading}
@@ -66,6 +73,26 @@ export const OrdersPage = () => {
           New Order
         </Link>
       </div>
+    </div>
+  );
+};
+
+const FilterDisplay = (props: {
+  status: Record<Order["status"], boolean>;
+  setStatus: (
+    value: React.SetStateAction<
+      Record<"new" | "completed" | "canceled", boolean>
+    >
+  ) => void;
+  dateRange: OrdersDateRange;
+  setDateRange: React.Dispatch<React.SetStateAction<OrdersDateRange>>;
+}) => {
+  return (
+    <div className="px-4 pt-4 flex gap-2">
+      <Badge variant="secondary">{getDateRangeLabel(props.dateRange)}</Badge>
+      {getStatusArr(props.status).map((item) => (
+        <Badge>{getStatusLabel(item)}</Badge>
+      ))}
     </div>
   );
 };
