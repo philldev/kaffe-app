@@ -40,6 +40,8 @@ export const CategoryForm = (props: CategoryFormProps) => {
     props.onSubmit?.(values);
   };
 
+  console.log(form.formState.errors);
+
   return (
     <Form {...form}>
       <form

@@ -41,8 +41,9 @@ const NavMenus = () => {
     <div className="fixed bottom-0 inset-x-0 z-40">
       <div className="h-[60px] bg-background max-w-xl flex mx-auto items-center border-t w-full">
         <nav className="px-4 flex gap-4 w-full">
-          {menus.map((item) => (
+          {menus.map((item, index) => (
             <NavLink
+              key={index}
               to={item.path}
               className={({ isActive }) =>
                 cn(

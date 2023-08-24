@@ -79,6 +79,7 @@ const CategoryList = ({
 
   const itemsView = data.map((item) => (
     <Card
+      key={item.id}
       onClick={() => {
         navigate(`${item.id}`);
       }}

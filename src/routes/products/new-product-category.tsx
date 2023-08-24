@@ -34,7 +34,7 @@ export const NewProductCategoryPage = () => {
   const countQuery = useProductCategoriesCount();
 
   const handleSubmit = (values: CategoryFormValues) => {
-    if (!countQuery.data) return;
+    if (typeof countQuery.data !== "number") return;
 
     const limitReached =
       countQuery.data === ProductConfig.CREATE_PRODUCT_CATEGORY_LIMIT;
