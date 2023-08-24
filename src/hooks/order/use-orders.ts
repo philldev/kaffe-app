@@ -43,7 +43,7 @@ export const useOrders = () => {
         .from("orders")
         .select()
         .eq("user_id", userId)
-        .eq("status", statusArr)
+        .in(statusArr.length ? "status" : "", statusArr)
         .filter("created_at", "gte", startDate.toISOString())
         .filter("created_at", "lte", endDate.toISOString())
         .range(range.from, range.to)

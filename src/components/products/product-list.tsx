@@ -5,7 +5,7 @@ import { Skeleton } from "../ui/skeleton";
 import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
 import { Spinner } from "../ui/spinner";
-import { cn, createArray } from "@/lib/utils";
+import { cn, createArray, formatPriceShort } from "@/lib/utils";
 
 export const ProductList = ({
   data = [],
@@ -39,7 +39,7 @@ export const ProductList = ({
     >
       <CardHeader className={cn(showAddButton ? "p-4" : "")}>
         <CardTitle>{item.name}</CardTitle>
-        <CardDescription>IDR {item.price}</CardDescription>
+        <CardDescription>{formatPriceShort(item.price)}</CardDescription>
         {showAddButton ? (
           <Button
             variant="outline"

@@ -18,6 +18,7 @@ import { Product } from "@/types/product";
 import { useCreateOrder } from "@/hooks/order/use-create-order";
 import { useAuth } from "@/components/auth/auth-provider";
 import { toast } from "@/components/ui/use-toast";
+import { formatPriceLong, formatPriceShort } from "@/lib/utils";
 
 export const NewOrderPage = () => {
   const orderItems = useOrderItems();
@@ -87,7 +88,9 @@ export const NewOrderPage = () => {
                 >
                   <div className="flex-1 flex flex-col">
                     <span>{item.product.name}</span>
-                    <span className="font-bold">IDR {item.product.price}</span>
+                    <span className="font-bold">
+                      {formatPriceShort(item.product.price)}
+                    </span>
                   </div>
                   <span>x {item.quantity}</span>
                   <div>
@@ -133,7 +136,7 @@ export const NewOrderPage = () => {
           <div>
             <Label>Total</Label>
             <p className="text-muted-foreground text-2xl">
-              IDR {orderItems.getTotal()}
+              {formatPriceLong(orderItems.getTotal())}
             </p>
           </div>
         </div>

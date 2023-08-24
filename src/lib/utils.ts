@@ -39,3 +39,23 @@ export function formatDate(dateStr?: string | Date): string {
     return "Invalid date format. Please use the format: 'YYYY-MM-DD HH:MM:SS'.";
   }
 }
+
+const priceFormatterShort = Intl.NumberFormat("en", {
+  notation: "compact",
+  style: "currency",
+  currency: "IDR",
+});
+
+const priceFormatterLong = Intl.NumberFormat("en", {
+  notation: "standard",
+  style: "currency",
+  currency: "IDR",
+});
+
+export function formatPriceShort(num: number) {
+  return priceFormatterShort.format(num);
+}
+
+export function formatPriceLong(num: number) {
+  return priceFormatterLong.format(num);
+}
